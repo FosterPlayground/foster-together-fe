@@ -6,7 +6,7 @@ import { createBrowserHistory } from 'history'
 
 const analytics = createBrowserHistory()
 // google analytics page view tracking
-history.listen(location => {
+analytics.listen(location => {
   ReactGA.set({ page: location.pathname }) // Update the user's current page
   ReactGA.pageview(location.pathname) // Record a pageview for the given page
 })
@@ -14,7 +14,7 @@ history.listen(location => {
 function App() {
   return (
     <>
-      <Router history={history}>
+      <Router history={analytics}>
         <CssBaseline />
         <Route exact path='/signup' component={SignUp} />
       </Router>
