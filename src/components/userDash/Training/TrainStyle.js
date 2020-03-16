@@ -65,16 +65,22 @@ export const Cards = styled.div`
   .closed {
     color: red;
   }
-  #open {
-    flex-direction: column;
-  }
   &:hover {
     .img {
       transform: rotate(90deg);
       transition: transform 300ms ease-in-out;
     }
-    background-color: #253b44;
-    color: #ff8d86;
+    background-color: 	#C0C0C0;
+    color: blue;
+  }
+  .open {
+    flex-direction: column;
+    background-color: white;
+    color: black;
+    &:hover {
+      background-color: white;
+      color: black;
+    }
   }
 `
 export const Arrow = styled.img`

@@ -49,7 +49,7 @@ export default function Table( { columns, data, props }) {
                   <tr {...row.getRowProps()}>
                   {row.cells.map(cell => {
                     return (
-                      <td onClick={() => props.props.history.push(`/${cell.row.original.userType}/${cell.row.original.id}`)}{...cell.getCellProps()}>{cell.render('Cell')}</td>
+                      <td onClick={() => props.props.history.push(cell.row.original.family_id ? `/${cell.row.original.userType}/${cell.row.original.family_id}` : `/${cell.row.original.userType}/${cell.row.original.neighbor_id}` )}{...cell.getCellProps()}>{cell.render('Cell')}</td>
                     )
                   })}
                 </tr>
