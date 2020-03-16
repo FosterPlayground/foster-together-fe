@@ -7,7 +7,7 @@ export default function WelcomeMessage() {
     <WelcomeDiv>
       <BounceRight as='div' iterations='1'>
         <Title>
-          Welcome back, <Name>Ana Jones</Name>
+          Welcome back, <Name>{localStorage.getItem('firstName')}</Name>
         </Title>
       </BounceRight>
     </WelcomeDiv>

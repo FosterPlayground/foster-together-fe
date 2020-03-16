@@ -1,5 +1,5 @@
 import React from 'react'
-import { renderWithReduxAndRouter as render } from '../../../utils/renderWithReduxAndRouter'
+import { renderWithReduxAndRouter as render } from '../../../utils/testHelpers'
 import ReviewInfo from './ReviewInfo'
 
 const user = {
@@ -15,6 +15,8 @@ const user = {
   preferredContact: '',
 }
 
+const mockSetIsNeighbor = () => jest.mock()
+
 test('renders ReviewInfo without crashing', () => {
-  render(<ReviewInfo user={user} />)
+  render(<ReviewInfo user={user} setIsNeighbor={mockSetIsNeighbor} />)
 })

@@ -2,17 +2,11 @@ import styled from 'styled-components'
 
 export const DashContainer = styled.div`
   align-items: center;
-  min-height: 100vh;
   margin: 0 32px;
 `
 
 export const TableContain = styled.div`
-  position: relative;
-  left: 0vw;
-  top: 10vh;
-  height: auto;
-  width: '80vw';
-  border-radius: '5px';
+  border-radius: 5px;
 `
 export const LeftSelect = styled.div`
   display: flex;

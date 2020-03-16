@@ -1,16 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import OktaAuth from '@okta/okta-auth-js'
 import {
   Container,
   Sidebar,
   Logo,
   SidebarTitle,
-  ListItem,
   BackArrow,
   TabContainer,
   Tab,
-} from '../signUpForm/styles/signUpOverlayStyles'
+} from '../style'
 import logo from '../../images/logo.svg'
 import arrowImg from '../../images/icons/back-arrow.svg'
 import {
@@ -25,51 +23,31 @@ import {
   Forgot,
   ForContainer,
 } from './styles/LoginPage'
-import { axiosWithBaseURL } from '../../Auth/axiosWithBaseUrl'
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from '../../redux/thunks/authThunks'
+import { Event } from '../../utils/analytics/index'
 
-const LoginForm = props => {
-  const history = useHistory()
-  const [values, setValues] = React.useState({
-    sessionToken: null,
-    email: '',
-    password: '',
-  })
-  const [value, setValue] = useState(0)
+const LoginForm = () => {
+  const { push } = useHistory()
+  const { userType } = useSelector(state => state.auth)
+  const dispatch = useDispatch()
 
-  const oktaAuth = OktaAuth({
-    url: `https://dev-529730.okta.com/oauth2/default`,
-  })
+  useEffect(() => {
+    userType === 'admin' && push('/dashboard')
+  }, [userType, push])
 
-  const handleSubmit = e => {
-    e.preventDefault()
-    oktaAuth
-      .signIn({
-        email: values.email,
-        password: values.password,
-      })
-      .then(res =>
-        setValues({
-          sessionToken: res.sessionToken,
-        })
-      )
-  }
+  const [values, setValues] = useState({ email: '', password: '' })
+
   const handleChange = e => {
     setValues({ ...values, [e.target.name]: e.target.value })
   }
 
-  const handleToggle = (e, newValue) => {
-    setValue(newValue)
-  }
   const onSubmit = e => {
     e.preventDefault()
-    axiosWithBaseURL()
-      .post('/admins/login', values)
-      .then(response => {
-        localStorage.setItem('token', response.data.token)
-        history.push('/dash')
-      })
-      .catch(err => console.error(err))
+    dispatch(login(values))
   }
+
+  useEffect(() => {}, [])
 
   return (
     <Container>
@@ -80,11 +58,11 @@ const LoginForm = props => {
           </Logo>
           <SidebarTitle>
             Children need families{' '}
-            <p font-weight='none'> And families need support</p>
+            <p fontWeight='none'> And families need support</p>
           </SidebarTitle>
         </div>
         <BackArrow>
-          <img src={arrowImg} />
+          <img src={arrowImg} alt='back arrow' />
         </BackArrow>
       </Sidebar>
       <ContentBox>
@@ -92,11 +70,11 @@ const LoginForm = props => {
           <Tab active>
             <span>Log In</span>
           </Tab>
-          <Tab onClick={() => history.push('/signup')}>
+          <Tab onClick={() => push('/signup')}>
             <span>Register</span>
           </Tab>
         </TabContainer>
-        <InputContainer onSubmit={onSubmit} handleSubmit={handleSubmit}>
+        <InputContainer onSubmit={onSubmit}>
           <InputBox>
             <Input
               required
@@ -129,7 +107,11 @@ const LoginForm = props => {
               <Forgot>I forgot my password</Forgot>
             </ForContainer>
             <Btn>
-              <Submit handleSubmit={handleSubmit}>Submit</Submit>
+              <Submit
+                onClick={() => Event('Login', 'Tried to login', 'submit')}
+              >
+                Submit
+              </Submit>
             </Btn>
           </BtnContainer>
         </InputContainer>

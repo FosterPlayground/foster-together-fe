@@ -1,45 +1,46 @@
 import React, { useEffect } from 'react'
 import { Route } from 'react-router-dom'
-import Login from './components/logInForm/LoginForm'
-import { Security, ImplicitCallback } from '@okta/okta-react'
+import LoginForm from './components/logInForm/LoginForm'
 import SignUp from './components/signUpForm/SignUpOverlay/SignUpOverlay'
 import AdminDash from './components/AdminDash/AdminDashboard'
-import { CssBaseline } from '@material-ui/core'
+import { Normalize } from 'styled-normalize'
 import { ThemeProvider } from 'styled-components'
 import { theme } from './theme'
-import { initGA, PageView } from './Analytics'
+import { initGA, PageView } from './utils/analytics'
 import FamilyProfile from './components/UserDash/FamilyProfile'
 import NeighborProfile from './components/UserDash/NeighborProfile'
-
-function onAuthRequired({ history }) {
-  history.push('/login')
-}
+import { PrivateRoute } from './utils/customRoutes'
+import Map from './components/AdminDash/Map/Map'
+// temporary sign up confirmation, will be replaced with user dashboard
+import ConfirmationPage from './components/signUpForm/ConfirmationPage/ConfirmationPage'
+import SegmentOne from './components/UserDash/Training/SegmentOne'
+import Letter from './components/UserDash/Training/Letter'
+import SegmentTwo from './components/UserDash/Training/TrainingTwo'
+import SegmentThree from './components/UserDash/Training/TrainPart3'
+import SegmentFour from './components/UserDash/Training/TrainingPartFour'
 function App() {
   useEffect(() => {
     initGA('UA-159166357-1')
     PageView()
   }, [])
   return (
-    <Security
-      issuer='https://dev-529730.okta.com/oauth2/default'
-      clientId='0oa2lku5jYtkeMkYg4x6'
-      redirectUri={window.location.origin + '/implicit/callback'}
-      onAuthRequired={onAuthRequired}
-      pkce={true}
-    >
+    <>
+      <Normalize />
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Route
-          path='/login'
-          render={() => <Login baseUrl='https://dev-529730.okta.com' />}
-        />
+        <Route path='/training/0' component={Letter} />
+        <Route path='/training/1' component={SegmentOne} />
+        <Route path='/training/2' component={SegmentTwo} />
+        <Route path='/training/3' component={SegmentThree} />
+        <Route path='/training/4' component={SegmentFour} />
+        <Route path='/map' component={Map} />
+        <Route path='/login' component={LoginForm} />
         <Route exact path='/signup' component={SignUp} />
-        <Route exact path='/dash' component={AdminDash} />
-        <Route path='/implicit/callback' component={ImplicitCallback} />
-        <Route path='/neighbor/:id' component={NeighborProfile} />
-        <Route path='/family/:id' component={FamilyProfile} />
+        <PrivateRoute exact path='/dashboard' component={AdminDash} />
+        <Route path='/confirmation' component={ConfirmationPage} />
+        <PrivateRoute path='/neighbor/:id' component={NeighborProfile} />
+        <PrivateRoute path='/family/:id' component={FamilyProfile} />
       </ThemeProvider>
-    </Security>
+    </>
   )
 }
 
