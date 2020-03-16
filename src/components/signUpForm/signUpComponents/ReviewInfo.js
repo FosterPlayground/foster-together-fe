@@ -1,17 +1,35 @@
 import React from 'react'
+import {
+  ReviewContainer,
+  BtnContainer,
+  Reviewtextone,
+  CityStateZip,
+} from '../styles/reviewStyles'
+import RadioButton from './RadioButton'
 
-const ReviewInfo = ({ user }) => (
+const ReviewInfo = ({ setIsNeighbor, values }) => (
   <div>
-    <h3>
-      Name: {user.firstName} {user.lastName}{' '}
-    </h3>
-    <h3>Phone: {user.phone} </h3>
-    <h3> Email: {user.email}</h3>
-    <h3>Address: {user.address}</h3>
-    <h3>City: {user.city}</h3>
-    <h3>State: {user.state}</h3>
-    <h3>Zip: {user.zip}</h3>
+    <p>Almost Done! Does this information look correct to you?</p>
+    <ReviewContainer>
+      <div>
+        <Reviewtextone>
+          Name: {values?.first_name} {values?.last_name}{' '}
+        </Reviewtextone>
+        <Reviewtextone>Phone: {values?.phone} </Reviewtextone>
+        <Reviewtextone> Email: {values?.email}</Reviewtextone>
+      </div>
+      <CityStateZip>
+        <p>{values?.address},</p>
+        <p>
+          {values?.city}, {values?.state} &nbsp;
+          {values?.zip}
+        </p>
+      </CityStateZip>
+    </ReviewContainer>
+    <p>One last thing. Are you volunteering to be a Neighbor or Family?</p>
+    <BtnContainer>
+      <RadioButton setIsNeighbor={setIsNeighbor} />
+    </BtnContainer>
   </div>
 )
-
 export default ReviewInfo
