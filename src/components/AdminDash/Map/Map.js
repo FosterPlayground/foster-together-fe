@@ -1,53 +1,73 @@
-import React, { useState } from 'react'
-import GoogleMapReact from 'google-map-react'
-import Marker from './Marker'
-import { locations } from './Locations'
-import { Map } from 'google-maps-react'
+import React, { useState, useEffect } from 'react'
+import ReactMapGL, { Marker, Popup } from 'react-map-gl'
+import { MapContain } from './MapStyles'
+import FamMarker from './FamilyMarker'
+import NeighborMarker from './NeighborMarker'
+import { EggLocations } from './EggLocations'
+import EggMarker from './EggMarker'
 
-const SimpleMap = props => {
-  const [center, setCenter] = useState({ lat: 39.99, lng: -104.707 })
-  const [zoom, setZoom] = useState(11)
+function Map(props, { latitude, longitude, refresh }) {
+  const [zoom, setZoom] = useState()
+  const [eggStep, setEggStep] = useState(0)
+  const [viewport, setViewport] = useState({
+    latitude: 40,
+    longitude: -104.7,
+    zoom: 11,
+    width: '60vw',
+    height: '100%',
+  })
+  const [locations, setLocations] = useState(props.locations)
 
+  useEffect(() => {
+    console.log('hi')
+    setLocations(props.locations)
+  }, [props])
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        height: '90vh',
-        width: '100%',
-      }}
-    >
-      <div       style={{
-        display: 'flex',
-        justifyContent: 'center',
-        height: '100%',
-        width: '90%',
-      }}>
-      <GoogleMapReact
-        bootstrapURLKeys={
-          {
-            //key: process.env.GOOGLE_MAPS_API_KEY
-          }
-        }
-        defaultCenter={center}
-        defaultZoom={zoom}
-        {...console.log(Map)}
+    <MapContain>
+      <ReactMapGL
+        width='100%'
+        height='100%'
+        {...viewport}
+        mapboxApiAccessToken='pk.eyJ1IjoiYnNjaGF0emoiLCJhIjoiY2s3MHlnMGRiMDFndjNmbGN5NGN6aDllcSJ9.6U2mM86ENxVdKiXRRt6bYw'
+        mapStyle='mapbox://styles/bschatzj/ck7w41e6e00bs1jqtqe2rkal9'
+        onViewportChange={viewport => {
+          setZoom(viewport.zoom)
+          setViewport(viewport)
+        }}
       >
-        {locations.map(location => {
-          return (
-            <Marker
-              lat={location.coords.lat}
-              lng={location.coords.lng}
-              name={location.title}
-              zoom={''}
-              color='blue'
-            />
-          )
-        })}
-      </GoogleMapReact>
-      </div>
-    </div>
+        {locations.map(location => (
+          <Marker
+            key={location.id}
+            latitude={location.latitude}
+            longitude={location.longitude}
+          >
+            {location.type === 'neighbor' ? (
+              <NeighborMarker
+                setSelected={props.setSelected}
+                selected={props.selected}
+                location={location}
+                zoom={zoom}
+              />
+            ) : (
+              <FamMarker
+                setSelected={props.setSelected}
+                selected={props.selected}
+                location={location}
+                zoom={zoom}
+              />
+            )}
+          </Marker>
+        ))}
+        <Marker
+          key={EggLocations[eggStep].id}
+          longitude={EggLocations[eggStep].longitude}
+          latitude={EggLocations[eggStep].latitude}
+        >
+          <EggMarker setEgg={setEggStep} eggStep={eggStep} location={EggLocations[eggStep]} setSelected={props.setSelected} />
+        </Marker>
+      </ReactMapGL>
+    </MapContain>
   )
 }
 
-export default SimpleMap
+export default Map
