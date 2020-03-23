@@ -116,7 +116,7 @@ export default function TrainingTwo(props) {
             we can provide clarity. *
           </MainContent>
         </Section2>
-        <Input name="answer1" value={form.answer1}/>
+        <Input name='answer1' value={form.answer1} />
         {section == 1 ? (
           <ATag href='#part2'>
             <Submit
@@ -385,7 +385,6 @@ export default function TrainingTwo(props) {
               take one to four weeks, depending on the requirements of the
               specific county or agency? *
             </Header>
-            <CheckBox type='checkbox' />
             <CheckBox type='checkbox' />
           </Section2>
           <Section>

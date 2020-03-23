@@ -10,7 +10,7 @@ import { initGA, PageView } from './utils/analytics'
 import FamilyProfile from './components/UserDash/FamilyProfile'
 import NeighborProfile from './components/UserDash/NeighborProfile'
 import { PrivateRoute } from './utils/customRoutes'
-import Map from './components/AdminDash/Map/Map'
+import Map from './components/AdminDash/Map/MapOverlay'
 // temporary sign up confirmation, will be replaced with user dashboard
 import ConfirmationPage from './components/signUpForm/ConfirmationPage/ConfirmationPage'
 import SegmentOne from './components/UserDash/Training/SegmentOne'
@@ -18,6 +18,8 @@ import Letter from './components/UserDash/Training/Letter'
 import SegmentTwo from './components/UserDash/Training/TrainingTwo'
 import SegmentThree from './components/UserDash/Training/TrainPart3'
 import SegmentFour from './components/UserDash/Training/TrainingPartFour'
+import Chat from './components/Chat/Chat/Chat'
+import ThankYou from './components/AdminDash/ThankYou/Thankyou'
 function App() {
   useEffect(() => {
     initGA('UA-159166357-1')
@@ -27,6 +29,8 @@ function App() {
     <>
       <Normalize />
       <ThemeProvider theme={theme}>
+        <Route path = '/chat' component={Chat} />
+        <Route path = '/lambda' component={ThankYou} />
         <Route path='/training/0' component={Letter} />
         <Route path='/training/1' component={SegmentOne} />
         <Route path='/training/2' component={SegmentTwo} />
